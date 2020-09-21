@@ -6,9 +6,9 @@
 #define STRYPESTASK_QUEUE_H
 
 #include <stdlib.h>
-
+#include "point.h"
 struct Queue{
-    char* items;
+    struct Point* items;
     unsigned length;
     unsigned size;
 };
@@ -16,8 +16,8 @@ struct Queue{
 
 struct Queue new();
 void resize(struct Queue* this);
-void push(struct Queue* this, char item);
-char pop(struct Queue* this);
+void push(struct Queue* this, struct Point item);
+struct Point pop(struct Queue* this);
 
 void destroy(struct Queue* this);
 
