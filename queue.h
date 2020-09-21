@@ -19,6 +19,7 @@ void resize(struct Queue* this);
 void push(struct Queue* this, struct Point item);
 struct Point pop(struct Queue* this);
 
+
 void destroy(struct Queue* this);
 
 #endif //STRYPESTASK_QUEUE_H
