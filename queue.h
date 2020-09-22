@@ -14,11 +14,11 @@ struct Queue{
 };
 
 
-struct Queue new();
+struct Queue create_queue();
 void resize(struct Queue* this);
 void push(struct Queue* this, struct Point item);
 struct Point pop(struct Queue* this);
-
+void print(const struct Queue* this);
 
 void destroy(struct Queue* this);
 

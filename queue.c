@@ -4,7 +4,9 @@
 #include "queue.h"
 #include <assert.h>
 #include <string.h>
-struct Queue new(){
+#include <stdio.h>
+
+struct Queue create_queue(){
     struct Queue temp;
     temp.length = 0;
     temp.size = 1;
@@ -36,6 +38,11 @@ void push(struct Queue* this, const struct Point item){
     }
     this->items[this->length] = item;
     this->length += 1;
+}
+void print(const struct Queue* this){
+    for(uint i = 0; i < this->length; i++){
+        printf("(%d, %d)", this->items[i].x, this->items[i].y);
+    }
 }
 
 struct Point pop(struct Queue* this){
