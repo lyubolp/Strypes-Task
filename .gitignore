@@ -50,3 +50,10 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+*/.idea
+.idea/
+C/cmake-build-debug/
+C/tests.c
+internship-*
+
