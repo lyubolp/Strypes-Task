@@ -42,14 +42,31 @@ uint traverse_graph(char** graph, struct Point* start, const struct Point* botto
     destroy(&visited);
     return length;
 }
+char** parse_graph(const char* unparsed_graph, struct Point* bottom_right){
+    int temp = bottom_right->x + 1;
+    char** result = calloc(temp, sizeof(char*));
 
-extern uint find_longest_len(char** graph, const struct Point* bottom_right){
-    uint max_path = 0;
+    for(uint i = 0; i <= bottom_right->x; i++){
+        result[i] = calloc(bottom_right->y + 1, sizeof(char));
+    }
     for(uint i = 0; i <= bottom_right->x; i++){
         for(uint j = 0; j <= bottom_right->y; j++){
+            result[i][j] = unparsed_graph[(i * bottom_right->x) + j];
+        }
+    }
+    return result;
+
+}
+extern int find_longest_len(char* unparsed_graph, const int bottom_right_x, const int bottom_right_y){
+    int max_path = 0;
+    struct Point bottom_right = create_point(bottom_right_x, bottom_right_y);
+    char** graph = parse_graph(unparsed_graph, &bottom_right);
+
+    for(uint i = 0; i <= bottom_right.x; i++){
+        for(uint j = 0; j <= bottom_right.y; j++){
             if(graph[i][j] == 'R' || graph[i][j] == 'G' || graph[i][j] == 'B'){
                 struct Point temp = create_point(i, j);
-                uint current_result = traverse_graph(graph, &temp, bottom_right);
+                uint current_result = traverse_graph(graph, &temp, &bottom_right);
                 if(current_result > max_path){
                     max_path = current_result;
                 }
