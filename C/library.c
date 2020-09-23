@@ -1,8 +1,5 @@
 #include "library.h"
 
-#include <stdio.h>
-#include <math.h>
-
 void print_graph(const char** graph, const struct Point* bottom_right){
     for(int i = 0; i <= bottom_right->x; i++){
         for(int j = 0; j <= bottom_right->y; j++){
@@ -12,18 +9,29 @@ void print_graph(const char** graph, const struct Point* bottom_right){
     }
     printf("\n");
 }
+
+bool is_point_valid(const struct Point* target, const struct Point* bottom_right){
+    return (0 <= target->x && target->x <= bottom_right->x) && (0 <= target->y && target->y <= bottom_right->y);
+}
+
 uint traverse_graph(char** graph, struct Point* start, const struct Point* bottom_right) {
     struct Queue visited = create_queue();
-    uint lower_to_upper = 'a' - 'A';
+    const uint lower_to_upper = 'a' - 'A';
+
     char target = graph[start->x][start->y];
     graph[start->x][start->y] += lower_to_upper; //Marks it as visited
 
-    if(start->x < bottom_right->x && graph[start->x + 1][start->y] == target){
-        push(&visited, create_point(start->x + 1, start->y));
-    }
+    int x_offset[2] = {1, 0};
+    int y_offset[2] = {0, 1};
 
-    if(start->y < bottom_right->y && graph[start->x][start->y + 1] == target){
-        push(&visited, create_point(start->x, start->y + 1));
+    for(int i = 0; i < 2; i++){
+        uint target_x = start->x + x_offset[i];
+        uint target_y = start->y + y_offset[i];
+
+        struct Point current_point = create_point(target_x, target_y);
+        if(is_point_valid(&current_point, bottom_right)){
+            push(&visited, current_point);
+        }
     }
 
     int length = 1;
@@ -35,21 +43,21 @@ uint traverse_graph(char** graph, struct Point* start, const struct Point* botto
         graph[temp.x][temp.y] += lower_to_upper;
         length += 1;
 
-        if(temp.x < bottom_right->x && graph[temp.x + 1][temp.y] == target){
-            push(&visited, create_point(temp.x + 1, temp.y));
-        }
-        if(temp.y < bottom_right->y && graph[temp.x][temp.y + 1] == target){
-            push(&visited, create_point(temp.x, temp.y + 1));
-        }
-        if(0 < temp.x && graph[temp.x - 1][temp.y] == target){
-            push(&visited, create_point(temp.x - 1, temp.y));
-        }
-        if(0 < temp.y && graph[temp.x][temp.y - 1] == target){
-            push(&visited, create_point(temp.x, temp.y - 1));
+        int x_offset[4] = {1, 0, -1, 0};
+        int y_offset[4] = {0, 1, 0, -1};
+
+        for(int i = 0; i < 4; i++){
+            uint target_x = temp.x + x_offset[i];
+            uint target_y = temp.y + y_offset[i];
+
+            struct Point current_point = create_point(target_x, target_y);
+            if(is_point_valid(&current_point, bottom_right)){
+                push(&visited, current_point);
+            }
         }
     }
 
-    destroy(&visited);
+    free_queue(&visited);
     return length;
 }
 char** parse_graph(const char* unparsed_graph, struct Point* bottom_right){
@@ -64,7 +72,13 @@ char** parse_graph(const char* unparsed_graph, struct Point* bottom_right){
         }
     }
     return result;
+}
 
+void free_graph(char** graph, const int rows){
+    for(int i = 0; i < rows; i++){
+        free(graph[i]);
+    }
+    free(graph);
 }
 extern int find_longest_len(char* unparsed_graph, const int bottom_right_x, const int bottom_right_y){
     int max_path = 0;
@@ -82,5 +96,6 @@ extern int find_longest_len(char* unparsed_graph, const int bottom_right_x, cons
             }
         }
     }
+    free_graph(graph, bottom_right_x + 1);
     return max_path;
 }
