@@ -3,9 +3,10 @@ from collections import namedtuple
 from typing import List
 from ctypes import *
 import pathlib
-import os
+import sys
 
 Point = namedtuple('Point', ['x', 'y'])
+lib_path = pathlib.Path().absolute() / "../C/cmake-build-debug/libStrypesTask.so"
 
 
 def read_file(path) -> List[str]:
@@ -29,19 +30,22 @@ def parse_file_input(user_input) -> (List[List[int]], Point):
     return result, [rows, cols]
 
 
-if __name__ == '__main__':
-    file_input = read_file('../internship-assignment/tests/test_4')
+def setup_lib(path) -> CDLL:
+    lib = CDLL(path)
+    lib.find_longest_len.argtypes = [c_char_p, c_int, c_int]
+    lib.find_longest_len.restype = c_int
+    return lib
+
+
+def run(path_to_input) -> int:
+    lib = setup_lib(lib_path)
+    file_input = read_file(path_to_input)
     parsed_input = parse_file_input(file_input)
 
-    libname = pathlib.Path().absolute() / "../C/cmake-build-debug/libStrypesTask.so"
-    c_lib = CDLL(libname)
-
-    # s = 'hello'
-    # temp_string = c_char_p(s.encode('utf-8'))
-    # c_lib.print_str.argtypes = [c_char_p]
-    # c_lib.print_str(temp_string)
-
-    c_lib.find_longest_len.argtypes = [c_char_p, c_int, c_int]
-    c_lib.find_longest_len.restype = c_int
     graph = c_char_p(parsed_input[0].encode('utf-8'))
-    print(c_lib.find_longest_len(graph, parsed_input[1][0] - 1, parsed_input[1][1] - 1))
+    return lib.find_longest_len(graph, parsed_input[1][0] - 1, parsed_input[1][1] - 1)
+
+
+if __name__ == '__main__':
+    for arg in sys.argv[1:]:
+        print(run(arg))
