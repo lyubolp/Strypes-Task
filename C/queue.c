@@ -50,6 +50,6 @@ struct Point pop(struct Queue* this){
     return this->items[this->length];
 }
 
-void destroy(struct Queue* this){
+void free_queue(struct Queue* this){
     clear_memory(this->items);
 }
