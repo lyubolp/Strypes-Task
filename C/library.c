@@ -2,6 +2,16 @@
 
 #include <stdio.h>
 #include <math.h>
+
+void print_graph(const char** graph, const struct Point* bottom_right){
+    for(int i = 0; i <= bottom_right->x; i++){
+        for(int j = 0; j <= bottom_right->y; j++){
+            printf("%c ", graph[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
 uint traverse_graph(char** graph, struct Point* start, const struct Point* bottom_right) {
     struct Queue visited = create_queue();
     uint lower_to_upper = 'a' - 'A';
@@ -43,15 +53,14 @@ uint traverse_graph(char** graph, struct Point* start, const struct Point* botto
     return length;
 }
 char** parse_graph(const char* unparsed_graph, struct Point* bottom_right){
-    int temp = bottom_right->x + 1;
-    char** result = calloc(temp, sizeof(char*));
+    char** result = calloc(bottom_right->x + 1, sizeof(char*));
 
     for(uint i = 0; i <= bottom_right->x; i++){
         result[i] = calloc(bottom_right->y + 1, sizeof(char));
     }
     for(uint i = 0; i <= bottom_right->x; i++){
         for(uint j = 0; j <= bottom_right->y; j++){
-            result[i][j] = unparsed_graph[(i * bottom_right->x) + j];
+            result[i][j] = unparsed_graph[(i * (bottom_right->x + 1)) + j];
         }
     }
     return result;

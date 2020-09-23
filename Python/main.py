@@ -25,11 +25,12 @@ def parse_file_input(user_input) -> (List[List[int]], Point):
     for line in user_input[1:]:
         for item in line.strip().split(' '):
             result += item
+
     return result, [rows, cols]
 
 
 if __name__ == '__main__':
-    file_input = read_file('../internship-assignment/tests/test_2')
+    file_input = read_file('../internship-assignment/tests/test_4')
     parsed_input = parse_file_input(file_input)
 
     libname = pathlib.Path().absolute() / "../C/cmake-build-debug/libStrypesTask.so"
