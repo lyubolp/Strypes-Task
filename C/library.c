@@ -59,6 +59,7 @@ uint traverse_graph(char** graph, struct Point* start, const struct Point* botto
 
     free_queue(&visited);
     return length;
+
 }
 char** parse_graph(const char* unparsed_graph, struct Point* bottom_right){
     char** result = calloc(bottom_right->x + 1, sizeof(char*));
