@@ -6,10 +6,15 @@ import pathlib
 import sys
 
 Point = namedtuple('Point', ['x', 'y'])
-lib_path = pathlib.Path().absolute() / "../C/cmake-build-debug/libStrypesTask.so"
+lib_path = pathlib.Path().absolute() / "../C/libStrypesTask.so"
 
 
-def read_file(path) -> List[str]:
+def read_file(path: str) -> List[str]:
+    """
+    Reads a file from a given path, and returns its contents as a list of strings
+    :param path: the path to file, containing the input for the program
+    :return: List of strings, with the contents of the file
+    """
     result = []
     with open(path, 'r') as reader:
         for line in reader.readlines():
@@ -17,7 +22,12 @@ def read_file(path) -> List[str]:
     return result
 
 
-def parse_file_input(user_input) -> (List[List[int]], Point):
+def parse_file_input(user_input: List[str]) -> (List[List[int]], Point):
+    """
+    From a List of strings, converts the user input to 2d array of integers, and a point (the size of the graph)
+    :param user_input:
+    :return:
+    """
     rows_cols = user_input[0].strip().split(' ')
     rows = int(rows_cols[0])
     cols = int(rows_cols[1])
